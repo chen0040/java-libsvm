@@ -81,18 +81,18 @@ public class OneClassSVMUnitTest {
    @Test
    public void testSimple(){
 
-      DataTable trainingBatch = new DataTable("c1", "c2");
+      DataTable trainingData = new DataTable("c1", "c2");
       // add some normal data
       for(int i=0; i < 100; ++i){
-         trainingBatch.addRow(IS_NOT_ANOMALY, randn() * 0.3 + 2, randn() * 0.3 + 2);
-         trainingBatch.addRow(IS_NOT_ANOMALY, randn() * 0.3 - 2, randn() * 0.3 - 2);
+         trainingData.addRow(IS_NOT_ANOMALY, randn() * 0.3 + 2, randn() * 0.3 + 2);
+         trainingData.addRow(IS_NOT_ANOMALY, randn() * 0.3 - 2, randn() * 0.3 - 2);
       }
 
-      DataTable crossValidationBatch = new DataTable("c1", "c2");
+      DataTable crossValidationData = new DataTable("c1", "c2");
       // add some validation data
       for(int i=0; i < 20; ++i){
-         crossValidationBatch.addRow(IS_NOT_ANOMALY, randn() * 0.3 + 2, randn() * 0.3 + 2);
-         crossValidationBatch.addRow(IS_NOT_ANOMALY, randn() * 0.3 - 2, randn() * 0.3 - 2);
+         crossValidationData.addRow(IS_NOT_ANOMALY, randn() * 0.3 + 2, randn() * 0.3 + 2);
+         crossValidationData.addRow(IS_NOT_ANOMALY, randn() * 0.3 - 2, randn() * 0.3 - 2);
       }
 
       DataTable outliers = new DataTable("c1", "c2");
@@ -106,15 +106,15 @@ public class OneClassSVMUnitTest {
       algorithm.set_gamma(0.1);
       algorithm.set_nu(0.1);
 
-      algorithm.fit(trainingBatch);
+      algorithm.fit(trainingData);
 
-      for(int i = 0; i < crossValidationBatch.rowCount(); ++i){
-         String predicted = algorithm.isAnomaly(crossValidationBatch.row(i)) ? IS_ANOMALY : IS_NOT_ANOMALY;
-         logger.info("predicted: {}\texpected: {}", predicted, crossValidationBatch.row(i).getLabel());
+      for(int i = 0; i < crossValidationData.rowCount(); ++i){
+         String predicted = algorithm.isAnomaly(crossValidationData.row(i)) ? IS_ANOMALY : IS_NOT_ANOMALY;
+         logger.info("predicted: {}\texpected: {}", predicted, crossValidationData.row(i).getLabel());
       }
 
       for(int i = 0; i < outliers.rowCount(); ++i){
-         String predicted = algorithm.isAnomaly(crossValidationBatch.row(i)) ? IS_ANOMALY : IS_NOT_ANOMALY;
+         String predicted = algorithm.isAnomaly(crossValidationData.row(i)) ? IS_ANOMALY : IS_NOT_ANOMALY;
          logger.info("predicted: {}\texpected: {}", predicted, outliers.row(i).getLabel());
       }
 
