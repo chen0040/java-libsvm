@@ -1,4 +1,4 @@
-package com.github.chen0040.data;
+package com.github.chen0040.svmext.data;
 
 
 import java.util.List;

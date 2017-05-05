@@ -1,8 +1,8 @@
-package com.github.chen0040.oneclass;
+package com.github.chen0040.svmext.oneclass;
 
 
-import com.github.chen0040.data.DataFrame;
-import com.github.chen0040.data.DataRow;
+import com.github.chen0040.svmext.data.DataFrame;
+import com.github.chen0040.svmext.data.DataRow;
 import com.github.chen0040.libsvm.*;
 
 import java.util.Vector;

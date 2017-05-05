@@ -1,9 +1,7 @@
-package com.github.chen0040.data;
+package com.github.chen0040.svmext.data;
 
 
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
 
 
 /**

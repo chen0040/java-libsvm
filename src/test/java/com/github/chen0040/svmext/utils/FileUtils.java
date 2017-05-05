@@ -1,6 +1,5 @@
-package com.github.chen0040.utils;
+package com.github.chen0040.svmext.utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 

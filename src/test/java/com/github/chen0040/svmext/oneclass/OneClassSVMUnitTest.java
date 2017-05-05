@@ -1,9 +1,9 @@
-package com.github.chen0040.oneclass;
+package com.github.chen0040.svmext.oneclass;
 
 
-import com.github.chen0040.data.DataFrame;
-import com.github.chen0040.data.DataQuery;
-import com.github.chen0040.data.Sampler;
+import com.github.chen0040.svmext.data.DataFrame;
+import com.github.chen0040.svmext.data.DataQuery;
+import com.github.chen0040.svmext.data.Sampler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
