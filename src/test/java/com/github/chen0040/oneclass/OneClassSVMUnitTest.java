@@ -1,18 +1,14 @@
 package com.github.chen0040.oneclass;
 
 
-import com.github.chen0040.data.DataTable;
-import com.github.chen0040.utils.FileUtils;
+import com.github.chen0040.data.DataFrame;
+import com.github.chen0040.data.DataQuery;
+import com.github.chen0040.data.Sampler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
-
-import static org.testng.Assert.*;
 
 
 /**
@@ -22,8 +18,7 @@ public class OneClassSVMUnitTest {
 
    private static final Logger logger = LoggerFactory.getLogger(OneClassSVMUnitTest.class);
 
-   private static final String IS_NOT_ANOMALY = "NEGATIVE";
-   private static final String IS_ANOMALY = "POSITIVE";
+
 
    /*
    @Test
@@ -81,41 +76,52 @@ public class OneClassSVMUnitTest {
    @Test
    public void testSimple(){
 
-      DataTable trainingData = new DataTable("c1", "c2");
-      // add some normal data
-      for(int i=0; i < 100; ++i){
-         trainingData.addRow(IS_NOT_ANOMALY, randn() * 0.3 + 2, randn() * 0.3 + 2);
-         trainingData.addRow(IS_NOT_ANOMALY, randn() * 0.3 - 2, randn() * 0.3 - 2);
-      }
+      DataQuery.DataFrameQueryBuilder schema = DataQuery.blank()
+              .newInput("c1")
+              .newInput("c2")
+              .newOutput("anomaly")
+              .end();
 
-      DataTable crossValidationData = new DataTable("c1", "c2");
-      // add some validation data
-      for(int i=0; i < 20; ++i){
-         crossValidationData.addRow(IS_NOT_ANOMALY, randn() * 0.3 + 2, randn() * 0.3 + 2);
-         crossValidationData.addRow(IS_NOT_ANOMALY, randn() * 0.3 - 2, randn() * 0.3 - 2);
-      }
+      Sampler.DataSampleBuilder negativeSampler = new Sampler()
+              .forColumn("c1").generate((name, index) -> randn() * 0.3 + (index % 2 == 0 ? -2 : 2))
+              .forColumn("c2").generate((name, index) -> randn() * 0.3 + (index % 2 == 0 ? -2 : 2))
+              .forColumn("anomaly").generate((name, index) -> 0.0)
+              .end();
 
-      DataTable outliers = new DataTable("c1", "c2");
-      // add some outliers data
-      for(int i=0; i < 20; ++i){
-         outliers.addRow(IS_ANOMALY, rand(-4, 4), rand(-4, 4));
-         outliers.addRow(IS_ANOMALY, rand(-4, 4), rand(-4, 4));
-      }
+      DataFrame trainingData = schema.build();
 
+      trainingData = negativeSampler.sample(trainingData, 200);
+
+      System.out.println(trainingData.head(10));
+
+      DataFrame crossValidationData = schema.build();
+
+      crossValidationData = negativeSampler.sample(crossValidationData, 40);
+
+      DataFrame outliers = schema.build();
+
+      outliers = new Sampler()
+              .forColumn("c1").generate((name, index) -> rand(-4, 4))
+              .forColumn("c2").generate((name, index) -> rand(-4, 4))
+              .forColumn("anomaly").generate((name, index) -> 1.0)
+              .end().sample(outliers, 40);
+
+      final double threshold = 0.5;
       OneClassSVM algorithm = new OneClassSVM();
       algorithm.set_gamma(0.1);
       algorithm.set_nu(0.1);
+      algorithm.thresholdSupplier = () -> 0.0;
 
       algorithm.fit(trainingData);
 
       for(int i = 0; i < crossValidationData.rowCount(); ++i){
-         String predicted = algorithm.isAnomaly(crossValidationData.row(i)) ? IS_ANOMALY : IS_NOT_ANOMALY;
-         logger.info("predicted: {}\texpected: {}", predicted, crossValidationData.row(i).getLabel());
+         boolean predicted = algorithm.isAnomaly(crossValidationData.row(i));
+         logger.info("predicted: {}\texpected: {}", predicted, crossValidationData.row(i).target() > threshold);
       }
 
       for(int i = 0; i < outliers.rowCount(); ++i){
-         String predicted = algorithm.isAnomaly(crossValidationData.row(i)) ? IS_ANOMALY : IS_NOT_ANOMALY;
-         logger.info("predicted: {}\texpected: {}", predicted, outliers.row(i).getLabel());
+         boolean predicted = algorithm.isAnomaly(outliers.row(i));
+         logger.info("outlier predicted: {}\texpected: {}", predicted, outliers.row(i).target() > threshold);
       }
 
 

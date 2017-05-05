@@ -1,8 +1,8 @@
 package com.github.chen0040.oneclass;
 
 
+import com.github.chen0040.data.DataFrame;
 import com.github.chen0040.data.DataRow;
-import com.github.chen0040.data.DataTable;
 import com.github.chen0040.libsvm.*;
 
 import java.util.Vector;
@@ -97,7 +97,7 @@ public class OneClassSVM {
    }
 
    public double transform(DataRow row) {
-      double[] x0 = row.cells();
+      double[] x0 = row.toArray();
       int n = x0.length;
 
       SupportVectorMachineNode[] x = new SupportVectorMachineNode[n];
@@ -117,7 +117,7 @@ public class OneClassSVM {
       return p < threshold();
    }
 
-   public void fit(DataTable table) {
+   public void fit(DataFrame table) {
 
       if(this.quiet){
          svm_set_print_string_function(svm_print_null);
@@ -133,7 +133,7 @@ public class OneClassSVM {
       {
          DataRow tuple = table.row(i);
 
-         double[] x0 = tuple.cells();
+         double[] x0 = tuple.toArray();
          int n = x0.length;
 
          SupportVectorMachineNode[] x = new SupportVectorMachineNode[n];
