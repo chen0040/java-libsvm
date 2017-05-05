@@ -7,7 +7,20 @@ Package provides the direct java conversion of the origin libsvm
 
 # One-class SVM 
 
-Below is an example of the one-class SVM:
+Below is the code to create and train a one-class SVM:
+
+```java
+OneClassSVM algorithm = new OneClassSVM();
+algorithm.fit(training_data)
+```
+
+Below is the code to predict if data point is an outlier:
+
+```java
+algorithm.isAnomaly(data_point)
+```
+
+Below is an complete code example of the one-class SVM for the example below here:
 
 ![scki-learn example for one-class](http://scikit-learn.org/stable/_images/sphx_glr_plot_oneclass_001.png)
 
@@ -51,7 +64,6 @@ final double threshold = 0.5;
 OneClassSVM algorithm = new OneClassSVM();
 algorithm.set_gamma(0.1);
 algorithm.set_nu(0.1);
-algorithm.thresholdSupplier = () -> 0.0;
 
 algorithm.fit(trainingData);
 
