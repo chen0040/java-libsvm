@@ -23,7 +23,7 @@ public class BasicDataRow implements DataRow {
    private final List<String> targetColumns = new ArrayList<>();
 
    @Override public double target() {
-      return getTargetCell(getTargetColumnNames().get(0));
+      return getTargetCell(targetColumnName());
    }
 
    @Override
@@ -51,6 +51,38 @@ public class BasicDataRow implements DataRow {
    @Override public void setTargetColumnNames(List<String> outputColumns) {
       targetColumns.clear();
       targetColumns.addAll(outputColumns);
+   }
+
+
+   @Override public DataRow makeCopy() {
+      DataRow clone = new BasicDataRow();
+      clone.copy(this);
+      return clone;
+   }
+
+
+   @Override public void copy(DataRow that) {
+
+      targets.clear();
+      values.clear();
+      columns.clear();
+      targetColumns.clear();
+
+      for(String c : that.getTargetColumnNames()){
+         targets.put(c, that.getTargetCell(c));
+      }
+
+      for(String c : that.getColumnNames()) {
+         values.put(c, that.getCell(c));
+      }
+
+      setColumnNames(that.getColumnNames());
+      setTargetColumnNames(that.getTargetColumnNames());
+   }
+
+
+   @Override public String targetColumnName() {
+      return getTargetColumnNames().get(0);
    }
 
 

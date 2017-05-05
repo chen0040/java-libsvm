@@ -88,6 +88,12 @@ public class OneClassSVMUnitTest {
               .forColumn("anomaly").generate((name, index) -> 0.0)
               .end();
 
+      Sampler.DataSampleBuilder positiveSampler = new Sampler()
+              .forColumn("c1").generate((name, index) -> rand(-4, 4))
+              .forColumn("c2").generate((name, index) -> rand(-4, 4))
+              .forColumn("anomaly").generate((name, index) -> 1.0)
+              .end();
+
       DataFrame trainingData = schema.build();
 
       trainingData = negativeSampler.sample(trainingData, 200);
@@ -100,11 +106,7 @@ public class OneClassSVMUnitTest {
 
       DataFrame outliers = schema.build();
 
-      outliers = new Sampler()
-              .forColumn("c1").generate((name, index) -> rand(-4, 4))
-              .forColumn("c2").generate((name, index) -> rand(-4, 4))
-              .forColumn("anomaly").generate((name, index) -> 1.0)
-              .end().sample(outliers, 40);
+      outliers = positiveSampler.sample(outliers, 40);
 
       final double threshold = 0.5;
       OneClassSVM algorithm = new OneClassSVM();

@@ -27,4 +27,10 @@ public interface DataRow {
    void setColumnNames(List<String> inputColumns);
 
    void setTargetColumnNames(List<String> outputColumns);
+
+   DataRow makeCopy();
+
+   void copy(DataRow that);
+
+   String targetColumnName();
 }
