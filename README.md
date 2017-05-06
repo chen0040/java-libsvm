@@ -104,6 +104,21 @@ Below is the code to perform data binary classification:
 algorithm.isInClass(data_point)
 ```
 
+# OneVsOneSVC
+
+Below is the code to create and train a OneVsOneSVC for multi-class classification:
+
+```java
+BinarySVC algorithm = new BinarySVC();
+algorithm.fit(training_data)
+```
+
+Below is the code to perform multi-class classification:
+
+```java
+algorithm.classify(data_point)
+```
+
 # Data Format
 
 The data format default is the DataFrame class, which can be used to load csv and libsvm format text file. Please refers to the unit test cases on how they can be used.
@@ -268,6 +283,48 @@ for(int i = 0; i < crossValidationData.rowCount(); ++i){
  boolean actual = crossValidationData.row(i).target() > 0.5;
  evaluator.evaluate(actual, predicted);
  System.out.println("predicted: " + predicted + "\texpected: " + actual);
+}
+
+evaluator.report();
+```
+
+### Sample codes for OneVsOneSVC
+
+Below is another complete sample code of the OneVsOneSVC for multi-class classification:
+
+```java
+import com.github.chen0040.svmext.data.DataFrame;
+import com.github.chen0040.svmext.data.DataQuery;
+import com.github.chen0040.svmext.data.Sampler;
+import com.github.chen0040.svmext.classifiers.OneVsOneSVC;
+
+InputStream irisStream = new FileInputStream("iris.data");
+DataFrame irisData = DataQuery.csv(",", false)
+      .from(irisStream)
+      .selectColumn(0).asInput("Sepal Length")
+      .selectColumn(1).asInput("Sepal Width")
+      .selectColumn(2).asInput("Petal Length")
+      .selectColumn(3).asInput("Petal Width")
+      .selectColumn(4).transform(label -> label).asOutput("Iris Type")
+      .build();
+
+TupleTwo<DataFrame, DataFrame> parts = irisData.shuffle().split(0.9);
+
+DataFrame trainingData = parts._1();
+DataFrame crossValidationData = parts._2();
+
+System.out.println(crossValidationData.head(10));
+
+OneVsOneSVC multiClassClassifier = new OneVsOneSVC();
+multiClassClassifier.fit(trainingData);
+
+ClassifierEvaluator evaluator = new ClassifierEvaluator();
+
+for(int i=0; i < crossValidationData.rowCount(); ++i) {
+ String predicted = multiClassClassifier.classify(crossValidationData.row(i));
+ String actual = crossValidationData.row(i).categoricalTarget();
+ System.out.println("predicted: " + predicted + "\tactual: " + actual);
+ evaluator.evaluate(actual, predicted);
 }
 
 evaluator.report();

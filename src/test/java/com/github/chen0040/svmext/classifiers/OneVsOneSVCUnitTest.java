@@ -3,6 +3,7 @@ package com.github.chen0040.svmext.classifiers;
 
 import com.github.chen0040.svmext.data.DataFrame;
 import com.github.chen0040.svmext.data.DataQuery;
+import com.github.chen0040.svmext.evaluators.ClassifierEvaluator;
 import com.github.chen0040.svmext.utils.FileUtils;
 import com.github.chen0040.svmext.utils.TupleTwo;
 import org.testng.annotations.Test;
@@ -39,12 +40,15 @@ public class OneVsOneSVCUnitTest {
       OneVsOneSVC multiClassClassifier = new OneVsOneSVC();
       multiClassClassifier.fit(trainingData);
 
+      ClassifierEvaluator evaluator = new ClassifierEvaluator();
+
       for(int i=0; i < crossValidationData.rowCount(); ++i) {
          String predicted = multiClassClassifier.classify(crossValidationData.row(i));
          String actual = crossValidationData.row(i).categoricalTarget();
          System.out.println("predicted: " + predicted + "\tactual: " + actual);
+         evaluator.evaluate(actual, predicted);
       }
 
-
+      evaluator.report();
    }
 }

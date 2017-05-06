@@ -7,8 +7,8 @@ import java.util.Map;
 /**
  * Created by xschen on 10/9/2016.
  */
-public class BinaryClassifierEvaluator implements Serializable {
-   private static final long serialVersionUID = -6175902545631384642L;
+public class BinaryClassifierEvaluator {
+
    private int truePositive = 0;
    private int trueNegative = 0;
 
@@ -268,10 +268,10 @@ public class BinaryClassifierEvaluator implements Serializable {
    
    public String getSummary() {
       StringBuilder sb = new StringBuilder();
-      sb.append("Training accuracy: ").append(getAccuracy());
-      sb.append("\nTraining mis-classification: ").append(getMisclassificationRate());
-      sb.append("\nTraining f1-score: ").append(getF1Score());
-      sb.append("\nDuration (seconds): ").append(durationInSeconds());
+      sb.append("accuracy: ").append(getAccuracy());
+      sb.append("\nmis-classification: ").append(getMisclassificationRate());
+      sb.append("\nf1-score: ").append(getF1Score());
+      sb.append("\nduration (seconds): ").append(durationInSeconds());
 
       return sb.toString();
    }
