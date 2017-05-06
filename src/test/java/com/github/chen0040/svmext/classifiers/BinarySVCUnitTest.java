@@ -79,7 +79,7 @@ public class BinarySVCUnitTest {
       BinaryClassifierEvaluator evaluator = new BinaryClassifierEvaluator();
 
       for(int i = 0; i < crossValidationData.rowCount(); ++i){
-         boolean predicted = algorithm.transform(crossValidationData.row(i)) > 0.5;
+         boolean predicted = algorithm.isInClass(crossValidationData.row(i));
          boolean actual = crossValidationData.row(i).target() > 0.5;
          evaluator.evaluate(actual, predicted);
          logger.info("predicted: {}\texpected: {}", predicted, actual);

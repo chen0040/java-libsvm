@@ -98,10 +98,10 @@ BinarySVC algorithm = new BinarySVC();
 algorithm.fit(training_data)
 ```
 
-Below is the code to perform data regression prediction:
+Below is the code to perform data binary classification:
 
 ```java
-algorithm.isAnomaly(data_point)
+algorithm.isInClass(data_point)
 ```
 
 # Data Format
@@ -264,7 +264,7 @@ algorithm.fit(trainingData);
 BinaryClassifierEvaluator evaluator = new BinaryClassifierEvaluator();
 
 for(int i = 0; i < crossValidationData.rowCount(); ++i){
- boolean predicted = algorithm.transform(crossValidationData.row(i)) > 0.5;
+ boolean predicted = algorithm.isInClass(crossValidationData.row(i));
  boolean actual = crossValidationData.row(i).target() > 0.5;
  evaluator.evaluate(actual, predicted);
  System.out.println("predicted: " + predicted + "\texpected: " + actual);
