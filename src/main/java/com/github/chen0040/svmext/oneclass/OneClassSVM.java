@@ -1,6 +1,7 @@
 package com.github.chen0040.svmext.oneclass;
 
 
+import com.github.chen0040.svmext.Learner;
 import com.github.chen0040.svmext.data.DataFrame;
 import com.github.chen0040.svmext.data.DataRow;
 import com.github.chen0040.libsvm.*;
@@ -16,7 +17,7 @@ import static com.github.chen0040.libsvm.SupportVectorMachine.svm_train;
 /**
  * Created by xschen on 2/5/2017.
  */
-public class OneClassSVM {
+public class OneClassSVM implements Learner {
 
    private static svm_print_interface svm_print_null = new svm_print_interface()
    {
@@ -96,6 +97,7 @@ public class OneClassSVM {
       return param;
    }
 
+   @Override
    public double transform(DataRow row) {
       double[] x0 = row.toArray();
       int n = x0.length;
@@ -117,7 +119,8 @@ public class OneClassSVM {
       return p < threshold();
    }
 
-   public void fit(DataFrame table) {
+   @Override
+   public void fit(DataFrame dataFrame) {
 
       if(this.quiet){
          svm_set_print_string_function(svm_print_null);
@@ -128,10 +131,10 @@ public class OneClassSVM {
       Vector<SupportVectorMachineNode[]> vx = new Vector<>();
       int max_index = 0;
 
-      int m = table.rowCount();
+      int m = dataFrame.rowCount();
       for(int i=0; i < m; ++i)
       {
-         DataRow tuple = table.row(i);
+         DataRow tuple = dataFrame.row(i);
 
          double[] x0 = tuple.toArray();
          int n = x0.length;

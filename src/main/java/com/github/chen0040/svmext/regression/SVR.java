@@ -2,12 +2,12 @@ package com.github.chen0040.svmext.regression;
 
 
 import com.github.chen0040.libsvm.*;
+import com.github.chen0040.svmext.Learner;
 import com.github.chen0040.svmext.data.DataFrame;
 import com.github.chen0040.svmext.data.DataRow;
 import com.github.chen0040.svmext.utils.Scaler;
 
 import java.util.Vector;
-import java.util.function.Function;
 
 import static com.github.chen0040.libsvm.SupportVectorMachine.svm_predict;
 import static com.github.chen0040.libsvm.SupportVectorMachine.svm_set_print_string_function;
@@ -17,7 +17,7 @@ import static com.github.chen0040.libsvm.SupportVectorMachine.svm_train;
 /**
  * Created by xschen on 5/5/2017.
  */
-public class SVR {
+public class SVR implements Learner {
    private static svm_print_interface svm_print_null = new svm_print_interface()
    {
       public void print(String s) {}
@@ -102,6 +102,7 @@ public class SVR {
       return param;
    }
 
+   @Override
    public double transform(DataRow row) {
 
       row = scaler.transform(row);
@@ -121,7 +122,7 @@ public class SVR {
       return scaler.inverseTransform(row.targetColumnName(), v);
    }
 
-
+   @Override
    public void fit(DataFrame frame) {
 
       if(this.quiet){
