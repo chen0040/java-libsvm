@@ -6,7 +6,52 @@
 
     <groupId>com.github.chen0040</groupId>
     <artifactId>java-libsvm</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.2</version>
+
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://github.com/chen0040/java-libsvm/LICENSE</url>
+            <comments>MIT License</comments>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <email>xs0040@gmail.com</email>
+            <id>chen0040</id>
+            <name>Xianshun Chen</name>
+            <url>https://github.com/chen0040</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/chen0040/java-libsvm</url>
+        <connection>scm:git:git://github.com/chen0040/java-libsvm.git</connection>
+        <developerConnection>scm:git:git@github.com:chen0040/java-libsvm.git</developerConnection>
+    </scm>
+
+    <issueManagement>
+        <url>https://github.com/chen0040/java-libsvm/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+
+    <name>libsvm</name>
+    <description>libsvm ported to Java</description>
+    <url>https://github.com/chen0040/java-libsvm</url>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
 
     <repositories>
@@ -43,8 +88,6 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
-
-        <build.version>1.0-SNAPSHOT</build.version>
 
         <surefire.version>2.19</surefire.version>
         <failsafe.version>2.19.1</failsafe.version>
@@ -91,7 +134,7 @@
         </profile>
 
         <profile>
-            <id>deployment</id>
+            <id>release</id>
             <properties>
                 <current.scope>compile</current.scope>
             </properties>
@@ -103,7 +146,64 @@
                         <version>${surefire.version}</version>
                         <configuration>
                             <skipTests>true</skipTests>
-                            <argLine>-Dfile.encoding=UTF-8</argLine>
+                        </configuration>
+                    </plugin>
+
+                    <!-- for generating the source jar -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- for generating the javadocs -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- GPG signed component -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -299,9 +399,15 @@
 
         <!-- Logging -->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.1.7</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.20</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.20</version>
         </dependency>
 
 
