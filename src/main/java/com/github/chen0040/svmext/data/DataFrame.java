@@ -1,6 +1,8 @@
 package com.github.chen0040.svmext.data;
 
 
+import com.github.chen0040.svmext.utils.TupleTwo;
+
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -29,7 +31,9 @@ public interface DataFrame extends Iterable<DataRow> {
 
    String head(int limit);
 
-   void shuffle();
+   DataFrame shuffle();
+
+   TupleTwo<DataFrame, DataFrame> split(double ratio);
 
    Stream<DataRow> stream();
 }

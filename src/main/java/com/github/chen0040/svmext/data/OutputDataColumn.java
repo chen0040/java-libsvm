@@ -24,4 +24,9 @@ public class OutputDataColumn {
    public boolean isCategorical(){
       return categorical;
    }
+
+
+   public OutputDataColumn makeCopy() {
+      return new OutputDataColumn(columnName, categorical);
+   }
 }

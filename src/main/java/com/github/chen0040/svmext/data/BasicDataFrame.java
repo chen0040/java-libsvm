@@ -2,6 +2,7 @@ package com.github.chen0040.svmext.data;
 
 
 import com.github.chen0040.svmext.utils.CollectionUtils;
+import com.github.chen0040.svmext.utils.TupleTwo;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -133,12 +134,38 @@ public class BasicDataFrame implements DataFrame {
    }
 
 
-   @Override public void shuffle() {
+   @Override public DataFrame shuffle() {
       Random random = new Random(System.currentTimeMillis());
       for(int i=1; i < rows.size(); ++i) {
          int j = random.nextInt(i+1);
          CollectionUtils.exchange(rows, i, j);
       }
+      return this;
+   }
+
+
+   @Override public TupleTwo<DataFrame, DataFrame> split(double ratio) {
+      assert this.locked;
+
+      BasicDataFrame frame1 = new BasicDataFrame();
+      BasicDataFrame frame2 = new BasicDataFrame();
+
+      frame1.inputDataColumns.addAll(inputDataColumns.stream().map(InputDataColumn::makeCopy).collect(Collectors.toList()));
+      frame2.inputDataColumns.addAll(inputDataColumns.stream().map(InputDataColumn::makeCopy).collect(Collectors.toList()));
+
+      frame1.outputDataColumns.addAll(outputDataColumns.stream().map(OutputDataColumn::makeCopy).collect(Collectors.toList()));
+      frame2.outputDataColumns.addAll(outputDataColumns.stream().map(OutputDataColumn::makeCopy).collect(Collectors.toList()));
+
+      int split = (int)(rows.size() * ratio);
+      for(int i=0; i < split; ++i) {
+         frame1.addRow(rows.get(i).makeCopy());
+      }
+      for(int i=split; i < rows.size(); ++i){
+         frame2.addRow(rows.get(i).makeCopy());
+      }
+
+      return new TupleTwo<>(frame1, frame2);
+
    }
 
 
