@@ -28,6 +28,8 @@ public class SVR implements Learner {
    private boolean quiet;
 
    private final Scaler scaler = new Scaler();
+   private String name;
+
 
    public void copy(SVR that){
 
@@ -181,7 +183,14 @@ public class SVR implements Learner {
    }
 
 
+   public void setName(String name) {
+      this.name = name;
+   }
 
+
+   public String getName() {
+      return name;
+   }
 
 
    public enum SVMType{

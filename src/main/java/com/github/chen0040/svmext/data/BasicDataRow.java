@@ -1,6 +1,8 @@
 package com.github.chen0040.svmext.data;
 
 
+import com.github.chen0040.svmext.utils.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,12 +20,20 @@ import java.util.stream.Collectors;
 public class BasicDataRow implements DataRow {
 
    private final Map<String, Double> targets = new HashMap<>();
+   private final Map<String, String> categoricalTargets = new HashMap<>();
+
    private final Map<String, Double> values = new HashMap<>();
+
    private final List<String> columns = new ArrayList<>();
    private final List<String> targetColumns = new ArrayList<>();
+   private final List<String> categoricalTargetColumns = new ArrayList<>();
 
    @Override public double target() {
       return getTargetCell(targetColumnName());
+   }
+
+   @Override public String categoricalTarget() {
+      return getCategoricalTargetCell(categoricalTargetColumnName());
    }
 
    @Override
@@ -31,7 +41,10 @@ public class BasicDataRow implements DataRow {
       return targets.getOrDefault(columnName, 0.0);
    }
 
-
+   @Override
+   public String getCategoricalTargetCell(String columnName){
+      return categoricalTargets.getOrDefault(columnName, "");
+   }
 
    @Override
    public void setTargetCell(String columnName, double value) {
@@ -41,6 +54,13 @@ public class BasicDataRow implements DataRow {
       targets.put(columnName, value);
    }
 
+   @Override
+   public void setCategoricalTargetCell(String columnName, String value) {
+      if(StringUtils.isEmpty(value)) {
+         categoricalTargets.remove(columnName);
+      }
+      categoricalTargets.put(columnName, value);
+   }
 
    @Override public void setColumnNames(List<String> inputColumns) {
       columns.clear();
@@ -53,6 +73,10 @@ public class BasicDataRow implements DataRow {
       targetColumns.addAll(outputColumns);
    }
 
+   @Override public void setCategoricalTargetColumnNames(List<String> outputColumns) {
+      categoricalTargetColumns.clear();
+      categoricalTargetColumns.addAll(outputColumns);
+   }
 
    @Override public DataRow makeCopy() {
       DataRow clone = new BasicDataRow();
@@ -64,9 +88,11 @@ public class BasicDataRow implements DataRow {
    @Override public void copy(DataRow that) {
 
       targets.clear();
+      categoricalTargets.clear();
       values.clear();
       columns.clear();
       targetColumns.clear();
+      categoricalTargetColumns.clear();
 
       for(String c : that.getTargetColumnNames()){
          targets.put(c, that.getTargetCell(c));
@@ -76,13 +102,22 @@ public class BasicDataRow implements DataRow {
          values.put(c, that.getCell(c));
       }
 
+      for(String c : that.getCategoricalTargetColumnNames()) {
+         categoricalTargets.put(c, that.getCategoricalTargetCell(c));
+      }
+
       setColumnNames(that.getColumnNames());
       setTargetColumnNames(that.getTargetColumnNames());
+      setCategoricalTargetColumnNames(that.getCategoricalTargetColumnNames());
    }
 
 
    @Override public String targetColumnName() {
       return getTargetColumnNames().get(0);
+   }
+
+   @Override public String categoricalTargetColumnName() {
+      return getCategoricalTargetColumnNames().get(0);
    }
 
 
@@ -108,6 +143,11 @@ public class BasicDataRow implements DataRow {
       targetColumns.addAll(cols);
    }
 
+   private void buildCategoricalTargetColumns(){
+      List<String> cols = categoricalTargets.keySet().stream().collect(Collectors.toList());
+      cols.sort(String::compareTo);
+      categoricalTargetColumns.addAll(cols);
+   }
 
    @Override public void setCell(String columnName, double value) {
       if(value == 0.0) {
@@ -133,6 +173,13 @@ public class BasicDataRow implements DataRow {
       return targetColumns;
    }
 
+   @Override
+   public List<String> getCategoricalTargetColumnNames() {
+      if(categoricalTargetColumns.size() < categoricalTargets.size()){
+         buildCategoricalTargetColumns();
+      }
+      return categoricalTargetColumns;
+   }
 
    @Override public double getCell(String key) {
       return values.getOrDefault(key, 0.0);
@@ -149,6 +196,7 @@ public class BasicDataRow implements DataRow {
          sb.append(keys.get(i)).append(":").append(getCell(keys.get(i)));
       }
       sb.append(" => ");
+
       keys = getTargetColumnNames();
       for(int i=0; i < keys.size(); ++i){
          if(i != 0){
@@ -156,6 +204,15 @@ public class BasicDataRow implements DataRow {
          }
          sb.append(keys.get(i)).append(":").append(getTargetCell(keys.get(i)));
       }
+
+      keys = getCategoricalTargetColumnNames();
+      for(int i=0; i < keys.size(); ++i){
+         if(i != 0){
+            sb.append(", ");
+         }
+         sb.append(keys.get(i)).append(":").append(getCategoricalTargetCell(keys.get(i)));
+      }
+
       return sb.toString();
    }
 }

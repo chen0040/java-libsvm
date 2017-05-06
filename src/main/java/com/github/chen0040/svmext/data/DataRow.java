@@ -9,6 +9,7 @@ import java.util.List;
  */
 public interface DataRow {
    double target();
+   String categoricalTarget();
 
    double[] toArray();
 
@@ -18,19 +19,29 @@ public interface DataRow {
 
    List<String> getTargetColumnNames();
 
+   List<String> getCategoricalTargetColumnNames();
+
    double getCell(String key);
 
    double getTargetCell(String columnName);
 
+   String getCategoricalTargetCell(String columnName);
+
    void setTargetCell(String columnName, double value);
+
+   void setCategoricalTargetCell(String columnName, String label);
 
    void setColumnNames(List<String> inputColumns);
 
    void setTargetColumnNames(List<String> outputColumns);
+
+   void setCategoricalTargetColumnNames(List<String> outputColumns);
 
    DataRow makeCopy();
 
    void copy(DataRow that);
 
    String targetColumnName();
+
+   String categoricalTargetColumnName();
 }

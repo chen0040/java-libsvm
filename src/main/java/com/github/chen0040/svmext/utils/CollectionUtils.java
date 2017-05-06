@@ -1,6 +1,8 @@
 package com.github.chen0040.svmext.utils;
 
 
+import com.github.chen0040.svmext.data.DataRow;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -33,5 +35,12 @@ public class CollectionUtils {
          result.add(that[i]);
       }
       return result;
+   }
+
+
+   public static <T> void exchange(List<T> a, int i, int j) {
+      T temp = a.get(i);
+      a.set(i, a.get(j));
+      a.set(j, temp);
    }
 }

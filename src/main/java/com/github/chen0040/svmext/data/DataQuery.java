@@ -1,6 +1,7 @@
 package com.github.chen0040.svmext.data;
 
 import com.github.chen0040.svmext.utils.CsvUtils;
+import com.github.chen0040.svmext.utils.NumberUtils;
 import com.github.chen0040.svmext.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class DataQuery {
    }
 
    public interface DataColumnBuilder {
-      DataColumnBuilder transform(Function<String, Double> columnTransformer);
+      DataColumnBuilder transform(Function<String, Object> columnTransformer);
       DataFrameQueryBuilder asInput(String columnName);
       DataFrameQueryBuilder asOutput(String columnName);
    }
@@ -49,10 +50,10 @@ public class DataQuery {
 
    private static class DataFrameColumn {
       private int index;
-      private Function<String, Double> transformer;
+      private Function<String, Object> transformer;
       private String columnName;
 
-      public DataFrameColumn(String columnName, int index, Function<String, Double> transformer){
+      public DataFrameColumn(String columnName, int index, Function<String, Object> transformer){
          this.columnName = columnName;
          this.index = index;
          this.transformer = transformer;
@@ -91,12 +92,17 @@ public class DataQuery {
                for (int i = 0; i < words.length; ++i) {
                   for (DataFrameColumn c : inputColumns) {
                      if (c.index == i) {
-                        row.setCell(c.columnName, c.transformer.apply(words[i]));
+                        row.setCell(c.columnName, NumberUtils.toDouble(c.transformer.apply(words[i])));
                      }
                   }
                   for (DataFrameColumn c : outputColumns) {
                      if (c.index == i) {
-                        row.setTargetCell(c.columnName, c.transformer.apply(words[i]));
+                        Object target = c.transformer.apply(words[i]);
+                        if(target instanceof String) {
+                           row.setCategoricalTargetCell(c.columnName, (String)target);
+                        } else {
+                           row.setTargetCell(c.columnName, NumberUtils.toDouble(target));
+                        }
                      }
                   }
                }
@@ -126,10 +132,15 @@ public class DataQuery {
                for (Map<Integer, String> row : rows) {
                   DataRow newRow = dataFrame.newRow();
                   for (DataFrameColumn c : inputColumns) {
-                     newRow.setCell(c.columnName, c.transformer.apply(row.get(c.index)));
+                     newRow.setCell(c.columnName, NumberUtils.toDouble(c.transformer.apply(row.get(c.index))));
                   }
                   for (DataFrameColumn c : outputColumns) {
-                     newRow.setTargetCell(c.columnName, c.transformer.apply(row.get(c.index)));
+                     Object target = c.transformer.apply(row.get(c.index));
+                     if(target instanceof String) {
+                        newRow.setCategoricalTargetCell(c.columnName, (String) target);
+                     } else {
+                        newRow.setTargetCell(c.columnName, NumberUtils.toDouble(target));
+                     }
                   }
                   dataFrame.addRow(newRow);
                }
@@ -142,7 +153,7 @@ public class DataQuery {
                dataFrame.getInputColumns().add(new InputDataColumn(c.columnName));
             }
             for(DataFrameColumn c : outputColumns) {
-               dataFrame.getOutputColumns().add(new OutputDataColumn(c.columnName));
+               dataFrame.getOutputColumns().add(new OutputDataColumn(c.columnName, false));
             }
          }
 
@@ -179,7 +190,7 @@ public class DataQuery {
       }
 
 
-      @Override public DataColumnBuilder transform(Function<String, Double> columnTransformer) {
+      @Override public DataColumnBuilder transform(Function<String, Object> columnTransformer) {
          selected.transformer = columnTransformer;
          return this;
       }
