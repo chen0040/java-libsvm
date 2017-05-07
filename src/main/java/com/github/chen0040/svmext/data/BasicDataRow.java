@@ -195,23 +195,32 @@ public class BasicDataRow implements DataRow {
          }
          sb.append(keys.get(i)).append(":").append(getCell(keys.get(i)));
       }
-      sb.append(" => ");
+      sb.append(" =>");
 
       keys = getTargetColumnNames();
-      for(int i=0; i < keys.size(); ++i){
-         if(i != 0){
-            sb.append(", ");
+      if(!keys.isEmpty()) {
+         sb.append(" (");
+         for (int i = 0; i < keys.size(); ++i) {
+            if (i != 0) {
+               sb.append(", ");
+            }
+            sb.append(keys.get(i)).append(":").append(getTargetCell(keys.get(i)));
          }
-         sb.append(keys.get(i)).append(":").append(getTargetCell(keys.get(i)));
+         sb.append(")");
       }
 
       keys = getCategoricalTargetColumnNames();
-      for(int i=0; i < keys.size(); ++i){
-         if(i != 0){
-            sb.append(", ");
+      if(!keys.isEmpty()){
+         sb.append(" (");
+         for(int i=0; i < keys.size(); ++i){
+            if(i != 0){
+               sb.append(", ");
+            }
+            sb.append(keys.get(i)).append(":").append(getCategoricalTargetCell(keys.get(i)));
          }
-         sb.append(keys.get(i)).append(":").append(getCategoricalTargetCell(keys.get(i)));
+         sb.append(")");
       }
+
 
       return sb.toString();
    }
