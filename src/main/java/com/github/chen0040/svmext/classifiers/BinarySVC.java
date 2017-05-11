@@ -3,8 +3,8 @@ package com.github.chen0040.svmext.classifiers;
 
 import com.github.chen0040.libsvm.*;
 import com.github.chen0040.svmext.Learner;
-import com.github.chen0040.svmext.data.DataFrame;
-import com.github.chen0040.svmext.data.DataRow;
+import com.github.chen0040.data.frame.DataFrame;
+import com.github.chen0040.data.frame.DataRow;
 
 import java.util.Vector;
 import java.util.function.Function;

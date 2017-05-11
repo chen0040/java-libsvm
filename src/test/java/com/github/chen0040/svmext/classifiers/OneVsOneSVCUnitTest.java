@@ -1,11 +1,11 @@
 package com.github.chen0040.svmext.classifiers;
 
 
-import com.github.chen0040.svmext.data.DataFrame;
-import com.github.chen0040.svmext.data.DataQuery;
+import com.github.chen0040.data.frame.DataFrame;
+import com.github.chen0040.data.frame.DataQuery;
 import com.github.chen0040.svmext.evaluators.ClassifierEvaluator;
 import com.github.chen0040.svmext.utils.FileUtils;
-import com.github.chen0040.svmext.utils.TupleTwo;
+import com.github.chen0040.data.utils.TupleTwo;
 import org.testng.annotations.Test;
 
 import java.io.IOException;

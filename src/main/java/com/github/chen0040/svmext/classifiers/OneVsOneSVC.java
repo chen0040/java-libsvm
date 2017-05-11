@@ -1,11 +1,11 @@
 package com.github.chen0040.svmext.classifiers;
 
 import com.github.chen0040.svmext.Learner;
-import com.github.chen0040.svmext.data.BasicDataFrame;
-import com.github.chen0040.svmext.data.DataFrame;
-import com.github.chen0040.svmext.data.DataRow;
+import com.github.chen0040.data.frame.BasicDataFrame;
+import com.github.chen0040.data.frame.DataFrame;
+import com.github.chen0040.data.frame.DataRow;
 import com.github.chen0040.svmext.regression.SVR;
-import com.github.chen0040.svmext.utils.TupleTwo;
+import com.github.chen0040.data.utils.TupleTwo;
 
 import java.util.*;
 import java.util.stream.Collectors;

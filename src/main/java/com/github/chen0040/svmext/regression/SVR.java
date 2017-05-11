@@ -3,9 +3,9 @@ package com.github.chen0040.svmext.regression;
 
 import com.github.chen0040.libsvm.*;
 import com.github.chen0040.svmext.Learner;
-import com.github.chen0040.svmext.data.DataFrame;
-import com.github.chen0040.svmext.data.DataRow;
-import com.github.chen0040.svmext.utils.Scaler;
+import com.github.chen0040.data.frame.DataFrame;
+import com.github.chen0040.data.frame.DataRow;
+import com.github.chen0040.data.utils.Scaler;
 
 import java.util.Vector;
 

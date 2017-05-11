@@ -1,9 +1,9 @@
 package com.github.chen0040.svmext.classifiers;
 
 
-import com.github.chen0040.svmext.data.DataFrame;
-import com.github.chen0040.svmext.data.DataQuery;
-import com.github.chen0040.svmext.data.Sampler;
+import com.github.chen0040.data.frame.DataFrame;
+import com.github.chen0040.data.frame.DataQuery;
+import com.github.chen0040.data.frame.Sampler;
 import com.github.chen0040.svmext.evaluators.BinaryClassifierEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

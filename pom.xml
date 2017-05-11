@@ -6,7 +6,7 @@
 
     <groupId>com.github.chen0040</groupId>
     <artifactId>java-libsvm</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 
 
     <licenses>
@@ -488,6 +488,13 @@
             <version>2.0.2-beta</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.chen0040</groupId>
+            <artifactId>java-data-frame</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
 
     </dependencies>
 </project>

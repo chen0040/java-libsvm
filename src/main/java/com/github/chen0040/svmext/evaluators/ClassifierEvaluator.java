@@ -1,7 +1,7 @@
 package com.github.chen0040.svmext.evaluators;
 
 
-import com.github.chen0040.svmext.utils.NumberUtils;
+import com.github.chen0040.data.utils.NumberUtils;
 
 import java.io.Serializable;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
 package com.github.chen0040.svmext.evaluators;
 
 
-import com.github.chen0040.svmext.utils.TupleTwo;
+import com.github.chen0040.data.utils.TupleTwo;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
