@@ -1,17 +1,15 @@
 package com.github.chen0040.svmext.classifiers;
 
 
+import com.github.chen0040.data.evaluators.BinaryClassifierEvaluator;
 import com.github.chen0040.data.frame.DataFrame;
 import com.github.chen0040.data.frame.DataQuery;
 import com.github.chen0040.data.frame.Sampler;
-import com.github.chen0040.svmext.evaluators.BinaryClassifierEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import java.util.Random;
-
-import static org.testng.Assert.*;
 
 
 /**

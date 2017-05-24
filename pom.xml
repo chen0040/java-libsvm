@@ -6,13 +6,13 @@
 
     <groupId>com.github.chen0040</groupId>
     <artifactId>java-libsvm</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 
 
     <licenses>
         <license>
             <name>MIT</name>
-            <url>https://github.com/chen0040/java-libsvm/LICENSE</url>
+            <url>https://github.com/chen0040/java-libsvm/blob/master/LICENSE</url>
             <comments>MIT License</comments>
         </license>
     </licenses>
@@ -492,7 +492,7 @@
         <dependency>
             <groupId>com.github.chen0040</groupId>
             <artifactId>java-data-frame</artifactId>
-            <version>1.0.5</version>
+            <version>1.0.9</version>
         </dependency>
 
 
